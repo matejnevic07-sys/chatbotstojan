@@ -1,0 +1,12 @@
+name: Keep Alive
+
+on:
+  schedule:
+    - cron: '*/20 * * * *'  # Svako 20 minuta
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping chatbot
+        run: curl -s https://chatbotstojan-production.up.railway.app/health
