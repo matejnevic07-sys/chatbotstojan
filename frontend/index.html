@@ -442,9 +442,45 @@
     .send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .send-btn svg { width: 16px; height: 16px; }
 
+    /* ── MOBILE TABS ── */
+    .mobile-tabs {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 56px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      z-index: 200;
+    }
+    .mobile-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.14s;
+    }
+    .mobile-tab svg { width: 20px; height: 20px; }
+    .mobile-tab.active { color: var(--accent-light); }
+
     @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
+      .mobile-tabs { display: flex; }
+      .layout {
+        grid-template-columns: 1fr;
+        margin-bottom: 56px;
+        height: calc(100vh - 56px - 56px);
+      }
       .left-panel { display: none; }
+      .left-panel.mobile-active { display: flex; }
+      .right-panel { display: none; }
+      .right-panel.mobile-active { display: flex; }
     }
   </style>
 </head>
@@ -471,11 +507,28 @@
   </div>
 </nav>
 
+<!-- MOBILE TAB BAR -->
+<div class="mobile-tabs">
+  <button class="mobile-tab" id="tabDashboard" onclick="switchTab('dashboard')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+      <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+    </svg>
+    Dashboard
+  </button>
+  <button class="mobile-tab active" id="tabChat" onclick="switchTab('chat')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+    Chat
+  </button>
+</div>
+
 <!-- MAIN LAYOUT -->
 <div class="layout">
 
   <!-- ── LEFT PANEL ── -->
-  <div class="left-panel">
+  <div class="left-panel" id="leftPanel">
 
     <!-- KPI row -->
     <div>
@@ -553,7 +606,7 @@
   </div>
 
   <!-- ── RIGHT PANEL — CHAT ── -->
-  <div class="right-panel">
+  <div class="right-panel" id="rightPanel">
 
     <div class="chat-header">
       <div class="chat-header-icon">
@@ -616,6 +669,29 @@ Ask me anything — for example:
   const API = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
   let history = [];
   let isLoading = false;
+
+  /* ── MOBILE TABS ── */
+  function switchTab(tab) {
+    const left = document.getElementById('leftPanel');
+    const right = document.getElementById('rightPanel');
+    const tabD = document.getElementById('tabDashboard');
+    const tabC = document.getElementById('tabChat');
+    if (tab === 'dashboard') {
+      left.classList.add('mobile-active');
+      right.classList.remove('mobile-active');
+      tabD.classList.add('active');
+      tabC.classList.remove('active');
+    } else {
+      right.classList.add('mobile-active');
+      left.classList.remove('mobile-active');
+      tabC.classList.add('active');
+      tabD.classList.remove('active');
+    }
+  }
+
+  if (window.innerWidth <= 900) {
+    switchTab('chat');
+  }
 
   /* ── LOAD DASHBOARD DATA ── */
   async function loadDashboard() {
