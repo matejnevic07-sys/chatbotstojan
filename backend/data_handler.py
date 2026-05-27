@@ -2,7 +2,7 @@ import pandas as pd
 import re
 from pathlib import Path
 
-EXCEL_PATH = Path(__file__).parent.parent / "Vendor details by vendor segmention (2).xlsx"
+EXCEL_PATH = Path(__file__).parent.parent / "Vendor details anonymized.xlsx"
 
 _df: pd.DataFrame | None = None
 
