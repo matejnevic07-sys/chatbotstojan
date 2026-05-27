@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(python -m pip install pandas openpyxl fastapi uvicorn python-multipart anthropic python-dotenv -q)",
+      "Bash(python -m uvicorn main:app --port 8000)",
+      "Bash(curl -s http://localhost:8000/health)",
+      "PowerShell(Start-Sleep 10; try { Invoke-RestMethod http://localhost:8000/health } catch { \"Server not ready yet: $_\" })",
+      "PowerShell(Start-Sleep 12; try { \\(Invoke-WebRequest http://localhost:8000/health -UseBasicParsing\\).Content } catch { \"Not ready: $\\($_.Exception.Message\\)\" })",
+      "PowerShell(\\(Invoke-WebRequest http://localhost:8000/dashboard -UseBasicParsing\\).Content | ConvertFrom-Json | Select-Object vendor_count, total_spend)",
+      "PowerShell($r = Invoke-WebRequest http://localhost:8000/dashboard -UseBasicParsing; Write-Output $r.StatusCode; Write-Output \\($r.Content.Substring\\(0,300\\)\\))",
+      "PowerShell(Start-Process \"http://localhost:8000\")"
+    ]
+  }
+}
