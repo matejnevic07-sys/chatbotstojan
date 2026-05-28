@@ -54,11 +54,8 @@ def query_data(question: str) -> str:
             cat_filter = cat
             break
 
-    scope_filter = None
-    for scope in SCOPES:
-        if scope in q:
-            scope_filter = scope
-            break
+    scopes_mentioned = [s for s in SCOPES if s in q]
+    scope_filter = scopes_mentioned[0] if len(scopes_mentioned) == 1 else None
 
     # Detect vendor name (quoted or after "vendor"/"dobavljac")
     vendor_filter = None
