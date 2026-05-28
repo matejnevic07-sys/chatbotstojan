@@ -26,7 +26,7 @@ SCOPES = ["LOCAL", "REGIONAL", "GLOBAL"]
 def load_data() -> pd.DataFrame:
     global _df
     if _df is None:
-        _df = pd.read_excel(EXCEL_PATH)
+        _df = pd.read_excel(EXCEL_PATH, nrows=200000)
         _df = _df[~_df['Affiliate'].isna()]
         _df['Vendor Name'] = _df['Vendor Name'].fillna('').str.strip()
         _df['Spend (USD)'] = pd.to_numeric(_df['Spend (USD)'], errors='coerce').fillna(0)
@@ -231,3 +231,4 @@ def get_dataset_summary() -> str:
         f"Supplier scopes: {', '.join(sorted(df['Supplier Scope'].dropna().unique()))}\n"
         f"Managed types: {', '.join(df['Managed Supplier'].dropna().unique())}"
     )
+
