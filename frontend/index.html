@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Vendor Analytics — EMEA Procurement</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -475,12 +475,15 @@
       .layout {
         grid-template-columns: 1fr;
         margin-bottom: 56px;
-        height: calc(100vh - 56px - 56px);
+        height: calc(100dvh - 56px - 56px);
       }
       .left-panel { display: none; }
       .left-panel.mobile-active { display: flex; }
       .right-panel { display: none; }
-      .right-panel.mobile-active { display: flex; }
+      .right-panel.mobile-active { display: flex; height: 100%; }
+      .chat-footer {
+        padding-bottom: max(12px, env(safe-area-inset-bottom));
+      }
     }
   </style>
 </head>
@@ -826,3 +829,4 @@ Ask me anything — for example:
 </script>
 </body>
 </html>
+
