@@ -125,6 +125,22 @@ def query_data(question: str) -> str:
             lines.append(f"- {row['Level 1']}: {_fmt_usd(row['Spend (USD)'])}")
         return "\n".join(lines)
 
+    # Scope breakdown (Local / Regional / Global)
+    if len(scopes_mentioned) > 1 or any(w in q_lower for w in ['by scope', 'scope breakdown', 'supplier scope']):
+        result = (
+            filtered.groupby('Supplier Scope')['Spend (USD)']
+            .sum()
+            .sort_values(ascending=False)
+            .reset_index()
+        )
+        total = filtered['Spend (USD)'].sum()
+        lines = ["Spend by Supplier Scope:"]
+        for _, row in result.iterrows():
+            pct = (row['Spend (USD)'] / total * 100) if total > 0 else 0
+            lines.append(f"- {row['Supplier Scope']}: {_fmt_usd(row['Spend (USD)'])} ({pct:.1f}%)")
+        lines.append(f"\nTotal: {_fmt_usd(total)}")
+        return "\n".join(lines)
+
     # Managed supplier status
     if any(w in q_lower for w in ['managed', 'preferred', 'whitespace', 'non-addressable', 'klasifikacij', 'status']):
         result = (
